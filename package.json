@@ -1,21 +1,8 @@
 {
   "name": "my-html-project",
   "version": "1.0.0",
-  "description": "Dự án HTML chuẩn",
+  "description": "Website HTML CSS JavaScript",
   "main": "index.html",
-  "private": true,
-  "scripts": {
-    "start": "node server.js",
-    "build": "node -e \"console.log('Static site ready for deployment')\"",
-    "dev": "echo \"Dev script - thêm dev tool của bạn\""
-  },
-  "keywords": [
-    "html",
-    "css",
-    "javascript",
-    "web-development"
-  ],
-  "author": "Tên của bạn",
-  "license": "MIT",
-  "devDependencies": {}
+  "author": "Bui Hoang Anh",
+  "license": "MIT"
 }
