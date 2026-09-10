@@ -251,22 +251,26 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
-// Auto highlight bottom nav based on active page
-document.addEventListener("DOMContentLoaded", () => {
-  const currentPath = window.location.pathname.toLowerCase();
-  const navItems = document.querySelectorAll(".bottom-nav .nav-item");
+// Load the shared bottom navigation and highlight the current page.
+document.addEventListener("DOMContentLoaded", async () => {
+  const appContainer = document.querySelector(".app-container");
+  if (!appContainer || appContainer.querySelector(".bottom-nav")) return;
 
-  navItems.forEach(item => {
-    const page = item.getAttribute("data-page");
-    if (page && currentPath.includes(page)) {
-      item.classList.add("active");
-      item.classList.remove("text-slate-400");
-      item.classList.add("text-blue-600");
-    } else {
-      item.classList.remove("active");
-      item.classList.remove("text-blue-600");
-      item.classList.add("text-slate-400");
-    }
+  try {
+    const response = await fetch("../components/bottom-nav.html");
+    if (!response.ok) return;
+    appContainer.insertAdjacentHTML("beforeend", await response.text());
+  } catch (error) {
+    console.error("Unable to load bottom navigation", error);
+    return;
+  }
+
+  const currentPage = window.location.pathname.split("/").pop().replace(".html", "").toLowerCase() || "home";
+  document.querySelectorAll(".bottom-nav .nav-item").forEach(item => {
+    const isActive = item.dataset.page === currentPage;
+    item.classList.toggle("active", isActive);
+    item.classList.toggle("text-blue-600", isActive);
+    item.classList.toggle("text-slate-400", !isActive);
   });
 });
 
