@@ -17,7 +17,21 @@
   <link rel="stylesheet" href="css/common.css"/>
 
   <style>
-    .simulator-frame { width: 100%; height: 100vh; }
+    .simulator-frame {
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .simulator-frame.mobile-view {
+      max-width: 425px;
+      height: 890px;
+      border-radius: 44px;
+      box-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.7), 0 0 0 10px #1e293b, 0 0 0 13px #334155;
+    }
+    .simulator-frame.full-view {
+      max-width: 100%;
+      height: calc(100vh - 65px);
+      border-radius: 0;
+      box-shadow: none;
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -85,8 +99,8 @@
   </header> -->
 
   <!-- Simulator Main Container -->
-  <main class="flex-1 flex items-center justify-center p-0 overflow-hidden">
-    <div id="simulator-container" class="simulator-frame overflow-hidden bg-white relative flex flex-col">
+  <main class="flex-1 flex items-center justify-center p-0 sm:p-4 overflow-hidden">
+    <div id="simulator-container" class="simulator-frame mobile-view w-full overflow-hidden bg-white relative flex flex-col">
       <iframe id="page-iframe" src="pages/home.html" class="w-full h-full border-0" title="App Preview"></iframe>
     </div>
   </main>

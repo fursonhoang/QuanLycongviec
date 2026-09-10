@@ -251,22 +251,22 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
-// Load one shared navigation bar on every app page.
-document.addEventListener("DOMContentLoaded", async () => {
-  const appContainer = document.querySelector(".app-container");
-  if (appContainer && !appContainer.querySelector(".bottom-nav")) {
-    const response = await fetch("../components/bottom-nav.html");
-    if (response.ok) {
-      appContainer.insertAdjacentHTML("beforeend", await response.text());
-    }
-  }
+// Auto highlight bottom nav based on active page
+document.addEventListener("DOMContentLoaded", () => {
+  const currentPath = window.location.pathname.toLowerCase();
+  const navItems = document.querySelectorAll(".bottom-nav .nav-item");
 
-  const currentPage = window.location.pathname.split("/").pop().replace(".html", "").toLowerCase();
-  document.querySelectorAll(".bottom-nav .nav-item").forEach(item => {
-    const isActive = item.getAttribute("data-page") === (currentPage || "home");
-    item.classList.toggle("active", isActive);
-    item.classList.toggle("text-blue-600", isActive);
-    item.classList.toggle("text-slate-400", !isActive);
+  navItems.forEach(item => {
+    const page = item.getAttribute("data-page");
+    if (page && currentPath.includes(page)) {
+      item.classList.add("active");
+      item.classList.remove("text-slate-400");
+      item.classList.add("text-blue-600");
+    } else {
+      item.classList.remove("active");
+      item.classList.remove("text-blue-600");
+      item.classList.add("text-slate-400");
+    }
   });
 });
 
