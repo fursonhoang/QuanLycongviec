@@ -108,9 +108,6 @@ function renderAttendancePage() {
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-100">
-        <button onclick="showToast('Xem chi tiết ca ngày ${item.date}', 'info')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition">
-          <i class="fas fa-eye text-slate-500"></i> Chi tiết
-        </button>
         <a href="attendance-create.html" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-semibold flex items-center gap-1.5 transition">
           <i class="fas fa-pen text-blue-500"></i> Sửa
         </a>
