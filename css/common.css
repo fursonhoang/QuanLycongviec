@@ -61,16 +61,16 @@ body {
   scrollbar-width: none;
 }
 
-/* Device Simulator Wrapper */
+/* Full-height app layout without a simulated phone frame */
 .device-wrapper {
-  max-width: 425px;
+  max-width: none;
   width: 100%;
-  margin: 15px auto;
-  border-radius: 40px;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
   overflow: hidden;
-  height: calc(100vh - 30px);
-  max-height: 900px;
+  height: 100vh;
+  max-height: none;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -91,21 +91,9 @@ body {
   }
 }
 
-/* Mobile Notch / Dynamic Island simulation */
+/* The app no longer simulates a notch or device chrome. */
 .mobile-notch {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 26px;
-  background-color: #ffffff;
-  position: relative;
-  z-index: 50;
-  border-bottom: 1px solid rgba(241, 245, 249, 0.8);
-}
-@media (max-width: 640px) {
-  .mobile-notch {
-    display: none;
-  }
+  display: none;
 }
 .notch-pill {
   width: 105px;
@@ -123,6 +111,7 @@ body {
   position: relative;
   overflow: hidden;
   height: 100%;
+  min-height: 0;
 }
 
 /* Content Area with scroll */
@@ -164,6 +153,8 @@ body {
   border-top: 1px solid #f1f5f9;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
   z-index: 40;
+  min-height: 70px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
 }
 
 .nav-item.active {
