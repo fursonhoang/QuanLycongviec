@@ -19,6 +19,7 @@
   --text-main: #0f172a;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
+  --bottom-nav-space: 96px;
 }
 
 * {
@@ -97,13 +98,13 @@ body {
 .app-scroll-area {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 85px; /* space for bottom nav */
+  padding-bottom: var(--bottom-nav-space);
   scroll-behavior: smooth;
 }
 
 /* Page with bottom fixed actions */
 .app-scroll-area.has-action-bar {
-  padding-bottom: 95px;
+  padding-bottom: calc(var(--bottom-nav-space) + 24px);
 }
 
 /* Animation utilities */
