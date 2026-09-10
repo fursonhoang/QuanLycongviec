@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Dự án HTML chuẩn",
   "main": "index.html",
+  "private": true,
   "scripts": {
-    "start": "live-server",
-    "build": "echo \"Build script - thêm build tool của bạn\"",
+    "start": "node server.js",
+    "build": "node -e \"console.log('Static site ready for deployment')\"",
     "dev": "echo \"Dev script - thêm dev tool của bạn\""
   },
   "keywords": [
