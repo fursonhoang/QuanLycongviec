@@ -28,7 +28,7 @@
 
 body {
   font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #0f172a;
+  background-color: var(--bg-app);
   color: var(--text-main);
   margin: 0;
   padding: 0;
@@ -61,57 +61,24 @@ body {
   scrollbar-width: none;
 }
 
-/* Device Simulator Wrapper */
+/* App viewport without simulated device chrome */
 .device-wrapper {
-  max-width: 425px;
+  max-width: none;
   width: 100%;
-  margin: 15px auto;
-  border-radius: 40px;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
-  overflow: hidden;
-  height: calc(100vh - 30px);
-  max-height: 900px;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  height: 100vh;
+  max-height: none;
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #f8fafc;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--bg-app);
 }
 
-@media (max-width: 640px) {
-  .device-wrapper {
-    margin: 0;
-    border-radius: 0;
-    box-shadow: none;
-    height: 100vh;
-    max-height: 100vh;
-  }
-  body {
-    background-color: #f8fafc;
-  }
-}
-
-/* Mobile Notch / Dynamic Island simulation */
+/* No simulated notch or device controls */
 .mobile-notch {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 26px;
-  background-color: #ffffff;
-  position: relative;
-  z-index: 50;
-  border-bottom: 1px solid rgba(241, 245, 249, 0.8);
-}
-@media (max-width: 640px) {
-  .mobile-notch {
-    display: none;
-  }
-}
-.notch-pill {
-  width: 105px;
-  height: 16px;
-  background: #0f172a;
-  border-radius: 20px;
+  display: none;
 }
 
 /* App Main Container */
