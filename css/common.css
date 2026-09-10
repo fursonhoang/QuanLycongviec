@@ -19,7 +19,7 @@
   --text-main: #0f172a;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
-  --bottom-nav-space: 96px;
+  --bottom-nav-space: 112px;
 }
 
 * {
@@ -98,13 +98,13 @@ body {
 .app-scroll-area {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: var(--bottom-nav-space);
+  padding-bottom: calc(var(--bottom-nav-space) + env(safe-area-inset-bottom)) !important;
   scroll-behavior: smooth;
 }
 
 /* Page with bottom fixed actions */
 .app-scroll-area.has-action-bar {
-  padding-bottom: calc(var(--bottom-nav-space) + 24px);
+  padding-bottom: calc(var(--bottom-nav-space) + 32px + env(safe-area-inset-bottom)) !important;
 }
 
 /* Animation utilities */
