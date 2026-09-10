@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-blue: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --primary-border: #bfdbfe;
+  
+  --success-green: #16a34a;
+  --success-light: #dcfce7;
+  --success-text: #15803d;
+  
+  --danger-red: #dc2626;
+  --danger-light: #fee2e2;
+  --danger-text: #b91c1c;
+  
+  --bg-app: #f8fafc;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #0f172a;
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hide scrollbar for horizontal scroll chips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Device Simulator Wrapper */
+.device-wrapper {
+  max-width: 425px;
+  width: 100%;
+  margin: 15px auto;
+  border-radius: 40px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+  overflow: hidden;
+  height: calc(100vh - 30px);
+  max-height: 900px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 640px) {
+  .device-wrapper {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    height: 100vh;
+    max-height: 100vh;
+  }
+  body {
+    background-color: #f8fafc;
+  }
+}
+
+/* Mobile Notch / Dynamic Island simulation */
+.mobile-notch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 26px;
+  background-color: #ffffff;
+  position: relative;
+  z-index: 50;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.8);
+}
+@media (max-width: 640px) {
+  .mobile-notch {
+    display: none;
+  }
+}
+.notch-pill {
+  width: 105px;
+  height: 16px;
+  background: #0f172a;
+  border-radius: 20px;
+}
+
+/* App Main Container */
+.app-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Content Area with scroll */
+.app-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 85px; /* space for bottom nav */
+  scroll-behavior: smooth;
+}
+
+/* Page with bottom fixed actions */
+.app-scroll-area.has-action-bar {
+  padding-bottom: 95px;
+}
+
+/* Animation utilities */
+.page-fade {
+  animation: fadeIn 0.22s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Bottom Nav bar */
+.bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  z-index: 40;
+}
+
+.nav-item.active {
+  color: var(--primary-blue);
+}
+.nav-item.active .nav-icon {
+  color: var(--primary-blue);
+  transform: translateY(-1px);
+}
+
+/* Toast alert notification */
+#toast-notification {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -100%);
+  opacity: 0;
+}
+#toast-notification.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* Calendar bottom-sheet slide up animation */
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.animate-slideUp {
+  animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Day cell square for calendar grid */
+#cal-days-grid > div {
+  min-height: 36px;
+}
