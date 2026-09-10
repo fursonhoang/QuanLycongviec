@@ -127,11 +127,13 @@ body {
 .bottom-nav {
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  right: auto;
+  width: 100vw;
+  transform: translateX(-50%);
   background-color: #ffffff;
   border-top: 1px solid #f1f5f9;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -6px 16px rgba(15, 23, 42, 0.08);
   z-index: 40;
   min-height: 70px;
   padding-bottom: max(10px, env(safe-area-inset-bottom));
