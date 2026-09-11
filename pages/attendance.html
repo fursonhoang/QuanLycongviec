@@ -40,13 +40,13 @@
         <div class="flex items-center justify-between gap-2">
           <div>
             <span class="text-[10px] text-slate-400 font-semibold block uppercase">Thời gian</span>
-            <button class="flex items-center gap-1.5 font-extrabold text-slate-800 text-base leading-tight">
-              <span>Tháng 09/2026</span>
+            <button type="button" onclick="openAttendanceCalendar()" class="flex items-center gap-1.5 font-extrabold text-slate-800 text-base leading-tight">
+              <span id="attendance-month-label">Tháng hiện tại</span>
               <i class="fas fa-chevron-down text-xs text-slate-400"></i>
             </button>
           </div>
 
-          <a href="attendance-create.html" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-1.5 shadow-sm transition">
+          <a id="attendance-create-link" href="attendance-create.html" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-1.5 shadow-sm transition">
             <i class="fas fa-plus text-xs"></i>
             <span>Chấm công</span>
           </a>
@@ -58,12 +58,12 @@
             <i class="fas fa-search absolute left-3.5 text-slate-400 text-xs"></i>
             <input id="att-search-input" oninput="handleSearch(this.value)" type="text" placeholder="Tìm ngày, ghi chú, người làm..." class="w-full bg-white border border-slate-200 rounded-xl py-2 pl-9 pr-3 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 shadow-sm"/>
           </div>
-          <button class="w-9 h-9 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-blue-600 text-xs shadow-sm hover:bg-slate-50" title="Chế độ thẻ">
+          <!-- <button class="w-9 h-9 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-blue-600 text-xs shadow-sm hover:bg-slate-50" title="Chế độ thẻ">
             <i class="fas fa-bars-staggered"></i>
           </button>
           <button class="w-9 h-9 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-500 text-xs shadow-sm hover:bg-slate-50" title="Chế độ danh sách">
             <i class="fas fa-table-list"></i>
-          </button>
+          </button> -->
         </div>
 
         <!-- Horizontal Member Filter Chips -->
@@ -97,12 +97,12 @@
                 <i class="fas fa-chart-line"></i>
               </div>
               <div>
-                <h3 class="font-bold text-slate-900 text-sm">Tổng kết Tháng 09/2026</h3>
-                <p class="text-[10px] text-slate-500">Cập nhật lúc 18:30 hôm nay</p>
+                <h3 id="attendance-summary-title" class="font-bold text-slate-900 text-sm">Tổng kết tháng hiện tại</h3>
+                <p id="attendance-access-time" class="text-[10px] text-slate-500">Đang cập nhật thời gian truy cập...</p>
               </div>
             </div>
             <div class="text-right">
-              <span class="font-extrabold text-blue-700 text-base">45.0</span>
+              <span id="attendance-total-work" class="font-extrabold text-blue-700 text-base">0.0</span>
               <span class="text-xs font-bold text-blue-600 block">công</span>
             </div>
           </div>
@@ -110,15 +110,15 @@
           <div class="grid grid-cols-3 gap-2 text-center text-xs">
             <div class="bg-white rounded-xl p-2 border border-slate-100">
               <div class="text-[10px] text-slate-500 font-medium">Tổng thu</div>
-              <div class="font-bold text-emerald-600 text-[11px] mt-0.5">38.500.000 đ</div>
+              <div id="attendance-total-income" class="font-bold text-emerald-600 text-[11px] mt-0.5">0 đ</div>
             </div>
             <div class="bg-white rounded-xl p-2 border border-slate-100">
               <div class="text-[10px] text-slate-500 font-medium">Tổng chi</div>
-              <div class="font-bold text-rose-600 text-[11px] mt-0.5">6.200.000 đ</div>
+              <div id="attendance-total-expense" class="font-bold text-rose-600 text-[11px] mt-0.5">0 đ</div>
             </div>
             <div class="bg-emerald-100/60 rounded-xl p-2 border border-emerald-200">
               <div class="text-[10px] text-emerald-800 font-medium">Còn lại</div>
-              <div class="font-bold text-emerald-700 text-[11px] mt-0.5">32.300.000 đ</div>
+              <div id="attendance-total-balance" class="font-bold text-emerald-700 text-[11px] mt-0.5">0 đ</div>
             </div>
           </div>
 
@@ -184,18 +184,10 @@
             <i class="fas fa-cloud-arrow-down text-slate-400 text-sm"></i>
           </div>
 
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="window.print()" class="py-2.5 px-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 border border-slate-200 transition">
-              <i class="fas fa-file-pdf text-rose-600"></i>
-              <span>Xuất PDF</span>
-            </button>
-            <button onclick="showToast('Đã tạo tệp Word báo cáo công', 'success')" class="py-2.5 px-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 border border-slate-200 transition">
-              <i class="fas fa-file-word text-blue-600"></i>
+          <div class="grid grid-cols-1 gap-3">
+            <button onclick="exportMonthlyWord()" class="py-3 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center gap-2 border border-blue-200 transition shadow-sm">
+              <i class="fas fa-file-word text-blue-600 text-sm"></i>
               <span>Xuất Word</span>
-            </button>
-            <button onclick="window.print()" class="py-2.5 px-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 border border-slate-200 transition">
-              <i class="fas fa-print text-slate-600"></i>
-              <span>In</span>
             </button>
           </div>
         </div>
@@ -205,9 +197,31 @@
     </div> <!-- End app-container -->
   </div> <!-- End device-wrapper -->
 
+  <div id="attendance-calendar-modal" class="modal-hidden fixed inset-0 z-50 flex items-end justify-center">
+    <div class="modal-backdrop absolute inset-0" onclick="closeAttendanceCalendar()"></div>
+    <div class="bg-white rounded-t-3xl p-5 w-full max-w-sm relative z-10 shadow-2xl animate-slideUp">
+      <div class="flex items-center justify-between mb-4">
+        <button type="button" onclick="closeAttendanceCalendar()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center text-xs"><i class="fas fa-times"></i></button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="changeAttendanceMonth(-1)" class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 text-xs"><i class="fas fa-chevron-left"></i></button>
+          <strong id="attendance-calendar-title" class="text-sm text-slate-900"></strong>
+          <button type="button" onclick="changeAttendanceMonth(1)" class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 text-xs"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <button type="button" onclick="selectAttendanceToday()" class="px-2.5 py-1.5 bg-blue-600 text-white text-[11px] font-bold rounded-xl">Hôm nay</button>
+      </div>
+      <div class="grid grid-cols-7 text-center mb-1">
+        <div class="text-[10px] font-bold text-slate-500">T2</div><div class="text-[10px] font-bold text-slate-500">T3</div><div class="text-[10px] font-bold text-slate-500">T4</div><div class="text-[10px] font-bold text-slate-500">T5</div><div class="text-[10px] font-bold text-slate-500">T6</div><div class="text-[10px] font-bold text-slate-500">T7</div><div class="text-[10px] font-bold text-rose-500">CN</div>
+      </div>
+      <div id="attendance-calendar-days" class="grid grid-cols-7 gap-0.5 text-center"></div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="../js/common.js"></script>
   <script src="../js/supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
+  <script type="module" src="../js/monthly-export.js"></script>
   <script type="module" src="../js/attendance.js"></script>
   <script>
     function setMemberFilter(member, el) {

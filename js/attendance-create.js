@@ -104,8 +104,8 @@ async function loadEmployeesAndAttendance() {
       };
     });
 
-    const firstRow = attendanceRows?.[0];
-    document.getElementById("input-notes").value = firstRow?.note || "";
+    const firstNote = (attendanceRows || []).map(row => String(row.note || "").trim()).find(Boolean) || "";
+    document.getElementById("input-notes").value = firstNote;
     const income = (transactions || []).find(transaction => transaction.type === "income");
     const expense = (transactions || []).find(transaction => transaction.type === "expense");
     document.getElementById("input-thu").value = formatMoneyDisplay(income?.amount || 0);
@@ -349,6 +349,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   exposeHandlers();
   const queryDate = new URLSearchParams(window.location.search).get("date");
   const parsedDate = queryDate && /^\d{4}-\d{2}-\d{2}$/.test(queryDate) ? parseDateInput(queryDate) : new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (parsedDate > today) {
+    showError("Không thể chấm công cho ngày trong tương lai.");
+    window.location.replace("attendance.html");
+    return;
+  }
   currentDate = parsedDate;
   editingDate = formatDateInput(currentDate);
   updateDateDisplay(currentDate);

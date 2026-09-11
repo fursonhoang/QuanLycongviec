@@ -178,3 +178,95 @@ body {
 #cal-days-grid > div {
   min-height: 36px;
 }
+
+#monthly-print-area {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  body:has(#monthly-print-area) > *:not(#monthly-print-area) {
+    display: none !important;
+  }
+
+  #monthly-print-area {
+    display: block !important;
+    color: #111111;
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 13pt;
+    line-height: 1.4;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #monthly-print-area h1,
+  #monthly-print-area h2,
+  #monthly-print-area p {
+    font-family: "Times New Roman", Times, serif !important;
+    text-align: center;
+  }
+
+  #monthly-print-area h1 {
+    font-size: 20pt;
+    margin: 0 0 4pt;
+  }
+
+  #monthly-print-area p {
+    margin: 0 0 12pt;
+  }
+
+  #monthly-print-area table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: "Times New Roman", Times, serif !important;
+  }
+
+  #monthly-print-area th,
+  #monthly-print-area td {
+    border: 1px solid #555555;
+    padding: 5pt 4pt;
+    font-size: 13pt;
+    overflow-wrap: anywhere;
+    vertical-align: top;
+  }
+
+  #monthly-print-area th {
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  #monthly-print-area .print-summary-gap {
+    height: 39pt;
+  }
+
+  #monthly-print-area h2,
+  #monthly-print-area strong {
+    font-size: 13pt;
+    line-height: 1.4;
+  }
+
+  #monthly-print-area td:nth-child(1),
+  #monthly-print-area td:nth-child(2),
+  #monthly-print-area td:nth-child(3) {
+    text-align: center;
+  }
+
+  #monthly-print-area td.work.worked {
+    background: #dbf2ff;
+  }
+
+  #monthly-print-area .income {
+    color: #008000;
+  }
+
+  #monthly-print-area .expense {
+    color: #c00000;
+  }
+}

@@ -1,81 +1,59 @@
-/**
- * Finance Screen Logic (pages/finance.html)
- */
+import { supabase } from "./supabase.js";
 
 let currentFinanceFilter = "all";
+let financeRows = [];
+const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[character]));
+const money = value => new Intl.NumberFormat("vi-VN").format(Number(value) || 0);
+
+async function loadFinanceData() {
+  const { data, error } = await supabase.from("transactions").select("*").order("transaction_date", { ascending: false });
+  if (error) throw error;
+  financeRows = data || [];
+  window.supabaseTransactions = financeRows;
+}
 
 function renderFinancePage() {
   const container = document.getElementById("finance-transactions-list");
   if (!container) return;
-
-  const list = getFinanceList();
-  let filtered = list;
-
-  if (currentFinanceFilter === "thu") {
-    filtered = filtered.filter(f => f.type === "thu");
-  } else if (currentFinanceFilter === "chi") {
-    filtered = filtered.filter(f => f.type === "chi");
-  }
-
-  // Update badge counts
-  const totalCount = list.length;
-  const thuCount = list.filter(f => f.type === "thu").length;
-  const chiCount = list.filter(f => f.type === "chi").length;
-
-  const elAll = document.getElementById("count-all");
-  const elThu = document.getElementById("count-thu");
-  const elChi = document.getElementById("count-chi");
-
-  if (elAll) elAll.textContent = `(${totalCount})`;
-  if (elThu) elThu.textContent = `(${thuCount})`;
-  if (elChi) elChi.textContent = `(${chiCount})`;
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="text-center py-10 text-slate-400">
-        <i class="fas fa-receipt text-3xl mb-2 text-slate-300"></i>
-        <p class="text-xs">Không có khoản giao dịch nào</p>
-      </div>
-    `;
+  const typeFilter = currentFinanceFilter === "thu" ? "income" : currentFinanceFilter === "chi" ? "expense" : "all";
+  const filtered = typeFilter === "all" ? financeRows : financeRows.filter(row => row.type === typeFilter);
+  const income = financeRows.filter(row => row.type === "income");
+  const expense = financeRows.filter(row => row.type === "expense");
+  const incomeTotal = income.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+  const expenseTotal = expense.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+  const balance = incomeTotal - expenseTotal;
+  document.getElementById("finance-balance")?.replaceChildren(document.createTextNode(`${money(balance)} đ`));
+  document.getElementById("finance-income")?.replaceChildren(document.createTextNode(`+${money(incomeTotal)} đ`));
+  document.getElementById("finance-expense")?.replaceChildren(document.createTextNode(`-${money(expenseTotal)} đ`));
+  document.getElementById("finance-income-count")?.replaceChildren(document.createTextNode(`${income.length} giao dịch`));
+  document.getElementById("finance-expense-count")?.replaceChildren(document.createTextNode(`${expense.length} khoản chi`));
+  document.getElementById("finance-member-count")?.replaceChildren(document.createTextNode("0 thành viên đồng quản lý"));
+  const rate = incomeTotal ? Math.max(0, Math.min(100, (balance / incomeTotal) * 100)) : 0;
+  const rateElement = document.getElementById("finance-balance-rate");
+  const barElement = document.getElementById("finance-balance-bar");
+  if (rateElement) rateElement.textContent = `${rate.toFixed(1)}%`;
+  if (barElement) barElement.style.width = `${rate}%`;
+  document.getElementById("count-all")?.replaceChildren(document.createTextNode(`(${financeRows.length})`));
+  document.getElementById("count-thu")?.replaceChildren(document.createTextNode(`(${income.length})`));
+  document.getElementById("count-chi")?.replaceChildren(document.createTextNode(`(${expense.length})`));
+  if (!filtered.length) {
+    container.innerHTML = `<div class="text-center py-10 text-slate-400"><i class="fas fa-receipt text-3xl mb-2 text-slate-300"></i><p class="text-xs">Chưa có giao dịch</p></div>`;
     return;
   }
-
-  container.innerHTML = filtered.map(item => {
-    const isThu = item.type === "thu";
-    return `
-      <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] mb-3 card-touchable">
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-2">
-            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${isThu ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-              <i class="fas ${isThu ? 'fa-arrow-down' : 'fa-arrow-up'} text-[9px]"></i>
-              ${isThu ? 'THU' : 'CHI'}
-            </span>
-            <span class="text-[11px] text-slate-400">${item.date}</span>
-          </div>
-
-          <span class="font-bold text-[14px] ${isThu ? 'text-emerald-600' : 'text-rose-600'}">
-            ${isThu ? '+' : '-'}${new Intl.NumberFormat('vi-VN').format(item.amount)} đ
-          </span>
-        </div>
-
-        <div class="flex items-center justify-between mb-2.5">
-          <h4 class="font-bold text-slate-800 text-[14px] leading-snug">${item.title}</h4>
-          <span class="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px] flex-shrink-0 ml-2">
-            ${item.member}
-          </span>
-        </div>
-
-        <div class="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-50">
-          <div class="flex items-center gap-1.5 truncate max-w-[200px]">
-            <i class="fas ${item.methodIcon || 'fa-credit-card'} text-slate-400 text-xs"></i>
-            <span class="truncate">${item.method}</span>
-          </div>
-          <span class="text-[11px] px-2 py-0.5 rounded-full ${item.statusBg || 'bg-slate-100 text-slate-600'}">
-            ${item.status}
-          </span>
-        </div>
-      </div>
-    `;
-  }).join('');
+  container.innerHTML = filtered.map(row => {
+    const isIncome = row.type === "income";
+    return `<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] mb-3 card-touchable"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-2"><span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${isIncome ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}">${isIncome ? "THU" : "CHI"}</span><span class="text-[11px] text-slate-400">${escapeHtml(row.transaction_date)}</span></div><span class="font-bold text-[14px] ${isIncome ? "text-emerald-600" : "text-rose-600"}">${isIncome ? "+" : "-"}${money(row.amount)} đ</span></div><h4 class="font-bold text-slate-800 text-[14px] leading-snug">${escapeHtml(row.description || "Giao dịch")}</h4><div class="text-xs text-slate-500 pt-2 mt-2 border-t border-slate-50">${escapeHtml(row.note || "")}</div></div>`;
+  }).join("");
 }
 
+window.setTabFilter = (filter, element) => {
+  currentFinanceFilter = filter;
+  document.querySelectorAll(".finance-tab").forEach(button => { button.className = "finance-tab flex-1 py-1.5 text-xs font-semibold text-slate-500 rounded-lg transition hover:text-slate-700"; });
+  element.className = "finance-tab flex-1 py-1.5 text-xs font-bold text-blue-600 bg-white shadow-sm rounded-lg transition";
+  renderFinancePage();
+};
+window.renderFinancePage = renderFinancePage;
+document.addEventListener("DOMContentLoaded", async () => {
+  try { await loadFinanceData(); renderFinancePage(); }
+  catch (error) { console.error("Không thể tải giao dịch từ Supabase:", error); document.getElementById("finance-transactions-list").innerHTML = `<div class="text-center py-10 text-rose-500 text-xs">Không thể tải giao dịch.</div>`; }
+});

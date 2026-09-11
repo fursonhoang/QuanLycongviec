@@ -115,18 +115,18 @@
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
           <button class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1.5 text-xs font-bold text-slate-800 shadow-sm flex-shrink-0">
             <i class="far fa-calendar text-blue-600 text-xs"></i>
-            <span>Tháng 09/2026</span>
+            <span>Tháng hiện tại</span>
             <i class="fas fa-chevron-down text-[9px] text-slate-400"></i>
           </button>
 
           <button onclick="setInvoiceFilter('all', this)" class="btn-inv-filter bg-blue-600 text-white text-xs font-bold px-3.5 py-1.5 rounded-full flex-shrink-0 shadow-sm">
-            Tất cả (5)
+            Tất cả (0)
           </button>
           <button onclick="setInvoiceFilter('paid', this)" class="btn-inv-filter bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold px-3.5 py-1.5 rounded-full flex-shrink-0">
-            Đã thanh toán (3)
+            Đã thanh toán (0)
           </button>
           <button onclick="setInvoiceFilter('debt', this)" class="btn-inv-filter bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold px-3.5 py-1.5 rounded-full flex-shrink-0">
-            Còn nợ (2)
+            Còn nợ (0)
           </button>
         </div>
 
@@ -137,7 +137,7 @@
         <div class="text-center py-2 text-[11px] text-slate-400 space-y-0.5">
           <p class="font-medium text-slate-600 flex items-center justify-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
-            <span>Đang hiển thị 4/4 hóa đơn</span>
+            <span id="invoice-status-count">Đang hiển thị 0/0 hóa đơn</span>
           </p>
           <p>Dữ liệu được cập nhật tức thời theo thời gian thực</p>
         </div>
@@ -149,21 +149,8 @@
 
   <!-- Scripts -->
   <script src="../js/common.js"></script>
-  <script src="../js/invoice.js"></script>
-  <script>
-    function setInvoiceFilter(filter, el) {
-      window.currentInvoiceFilter = filter;
-      document.querySelectorAll(".btn-inv-filter").forEach(b => {
-        b.className = "btn-inv-filter bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-semibold px-3.5 py-1.5 rounded-full flex-shrink-0";
-      });
-      el.className = "btn-inv-filter bg-blue-600 text-white text-xs font-bold px-3.5 py-1.5 rounded-full flex-shrink-0 shadow-sm";
-      renderInvoicesPage();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      renderInvoicesPage();
-    });
-  </script>
+  <script src="../js/supabase-config.js"></script>
+  <script type="module" src="../js/invoice.js"></script>
 </body>
 </html>
 
