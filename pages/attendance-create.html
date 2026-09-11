@@ -304,9 +304,13 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Supabase-backed page logic -->
   <script src="../js/common.js"></script>
-  <script>
+  <script src="../js/supabase-config.js"></script>
+  <script type="module" src="../js/attendance-create.js"></script>
+
+  <!-- Legacy inline implementation disabled. -->
+  <!-- <script>
     // State of workers list (allow add, edit, toggle shift)
     let workersList = [
       { id: "w1", code: "G", name: "Giới", color: "bg-blue-100 text-blue-700", selected: true, sang: true, chieu: true },
@@ -639,6 +643,6 @@
       initDate();
       renderWorkers();
     });
-  </script>
+  </script> -->
 </body>
 </html>

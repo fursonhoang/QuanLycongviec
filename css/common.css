@@ -20,6 +20,7 @@
   --text-muted: #64748b;
   --border-color: #e2e8f0;
   --bottom-nav-space: 112px;
+  --bottom-nav-height: 70px;
 }
 
 * {
@@ -135,8 +136,14 @@ body {
   border-top: 1px solid #f1f5f9;
   box-shadow: 0 -6px 16px rgba(15, 23, 42, 0.08);
   z-index: 40;
-  min-height: 70px;
+  min-height: var(--bottom-nav-height);
   padding-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+/* Keep page actions visible above the fixed bottom navigation. */
+.action-bar-fixed {
+  bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom)) !important;
+  z-index: 45 !important;
 }
 
 .nav-item.active {

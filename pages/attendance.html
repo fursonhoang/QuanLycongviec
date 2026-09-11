@@ -206,13 +206,9 @@
   </div> <!-- End device-wrapper -->
 
   <!-- Scripts -->
-  <!-- <script src="../js/common.js"></script> -->
-  <!-- <script src="../js/attendance.js"></script> -->
-
-  <!-- Scripts -->
-<script src="../js/common.js"></script>
-<script src="../js/supabase-config.js"></script>
-<script type="module" src="../js/attendance.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script type="module" src="../js/attendance.js"></script>
   <script>
     function setMemberFilter(member, el) {
       window.setAttendanceFilter(member);
@@ -231,7 +227,7 @@
       const container = document.getElementById("per-worker-summary");
       if (!container) return;
 
-      const list = getAttendanceList();
+      const list = window.supabaseAttendanceList || [];
       const workerMap = {}; // { name: { code, color, cong } }
 
       list.forEach(item => {
@@ -276,16 +272,9 @@
       }).join('');
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      renderAttendancePage();
-      renderPerWorkerSummary();
-    });
-
-    
+    window.renderPerWorkerSummary = renderPerWorkerSummary;
+    document.addEventListener("supabase-attendance-loaded", renderPerWorkerSummary);
   </script>
 </body>
-
-
-
 </html>
 
