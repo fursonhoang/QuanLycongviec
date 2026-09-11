@@ -251,8 +251,18 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
-// Load the shared bottom navigation and highlight the current page.
+// Require the local login before opening application pages.
 document.addEventListener("DOMContentLoaded", async () => {
+  const currentPage = window.location.pathname.split("/").pop().toLowerCase();
+  const publicPages = ["", "index.html", "login.html"];
+  if (!publicPages.includes(currentPage) && sessionStorage.getItem("app_logged_in") !== "true") {
+    window.location.replace("login.html");
+    return;
+  }
+
+  if (currentPage === "login.html") return;
+
+  // Load the shared bottom navigation and highlight the current page.
   const appContainer = document.querySelector(".app-container");
   if (!appContainer || appContainer.querySelector(".bottom-nav")) return;
 
@@ -265,9 +275,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const currentPage = window.location.pathname.split("/").pop().replace(".html", "").toLowerCase() || "home";
+  const pageName = currentPage.replace(".html", "") || "home";
   document.querySelectorAll(".bottom-nav .nav-item").forEach(item => {
-    const isActive = item.dataset.page === currentPage;
+    const isActive = item.dataset.page === pageName;
     item.classList.toggle("active", isActive);
     item.classList.toggle("text-blue-600", isActive);
     item.classList.toggle("text-slate-400", !isActive);
