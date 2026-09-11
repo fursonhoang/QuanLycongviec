@@ -173,7 +173,22 @@ function closeCalendarModal() { document.getElementById("modal-calendar").classL
 function changeCalYear(delta) { calendarState.year += delta; renderCalendar(); }
 function changeCalMonth(month) { calendarState.month = month; renderCalendar(); }
 function selectCalToday() { const today = new Date(); calendarState = { year: today.getFullYear(), month: today.getMonth(), selectedDay: today.getDate() }; renderCalendar(); }
-function selectCalDay(day) { calendarState.selectedDay = day; renderCalendar(); }
+function isFutureCalendarDate(year, month, day) {
+  const selected = new Date(year, month, day);
+  selected.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return selected > today;
+}
+
+function selectCalDay(day) {
+  if (isFutureCalendarDate(calendarState.year, calendarState.month, day)) {
+    showError("Không thể chọn ngày trong tương lai.");
+    return;
+  }
+  calendarState.selectedDay = day;
+  renderCalendar();
+}
 
 function renderCalendar() {
   const { year, month, selectedDay } = calendarState;
@@ -187,14 +202,20 @@ function renderCalendar() {
   for (let index = 0; index < firstDay; index += 1) cells += "<div></div>";
   for (let day = 1; day <= daysInMonth; day += 1) {
     const weekDay = new Date(year, month, day).getDay();
+    const isFuture = isFutureCalendarDate(year, month, day);
     const selected = day === selectedDay;
-    const classes = selected ? "bg-blue-600 text-white shadow-md font-extrabold scale-110" : weekDay === 0 ? "text-rose-500 hover:bg-rose-50 font-semibold" : "text-slate-700 hover:bg-slate-100 font-semibold";
-    cells += `<div onclick="selectCalDay(${day})" class="w-full aspect-square rounded-xl flex items-center justify-center text-xs cursor-pointer transition ${classes}">${day}</div>`;
+    const classes = isFuture ? "text-slate-300 cursor-not-allowed" : selected ? "bg-blue-600 text-white shadow-md font-extrabold scale-110" : weekDay === 0 ? "text-rose-500 hover:bg-rose-50 font-semibold" : "text-slate-700 hover:bg-slate-100 font-semibold";
+    cells += `<button type="button" ${isFuture ? "disabled" : `onclick="selectCalDay(${day})"`} class="w-full aspect-square rounded-xl flex items-center justify-center text-xs transition ${classes}">${day}</button>`;
   }
   document.getElementById("cal-days-grid").innerHTML = cells;
 }
 
 async function confirmCalendarDate() {
+  if (isFutureCalendarDate(calendarState.year, calendarState.month, calendarState.selectedDay)) {
+    showError("Không thể chọn ngày trong tương lai.");
+    renderCalendar();
+    return;
+  }
   currentDate = new Date(calendarState.year, calendarState.month, calendarState.selectedDay);
   editingDate = formatDateInput(currentDate);
   updateDateDisplay(currentDate);
