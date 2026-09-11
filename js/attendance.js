@@ -2,8 +2,20 @@
  * Attendance Screen & Add Attendance Modal Logic
  */
 
+import { supabase } from "./supabase.js";
+
 let currentAttendanceFilter = "all";
 let currentAttendanceSearch = "";
+
+window.setAttendanceFilter = (filter) => {
+  currentAttendanceFilter = filter;
+  renderAttendancePage();
+};
+
+window.setAttendanceSearch = (keyword) => {
+  currentAttendanceSearch = keyword;
+  renderAttendancePage();
+};
 
 function renderAttendancePage() {
   const container = document.getElementById("attendance-cards-list");
@@ -116,3 +128,28 @@ function renderAttendancePage() {
   `).join('');
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  renderAttendancePage();
+});
+
+async function testSupabase() {
+  const { data, error, count } = await supabase
+    .from("employees")
+    .select("*", { count: "exact" });
+
+  if (error) {
+    window.supabaseEmployees = [];
+    console.error("Supabase employees query failed:", error.message, error);
+    return window.supabaseEmployees;
+  }
+
+  window.supabaseEmployees = data || [];
+  console.log("Supabase connected. employees count:", count ?? window.supabaseEmployees.length);
+  console.table(window.supabaseEmployees);
+  return window.supabaseEmployees;
+}
+
+window.renderAttendancePage = renderAttendancePage;
+window.testSupabase = testSupabase;
+
+testSupabase();

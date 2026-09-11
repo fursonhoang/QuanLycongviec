@@ -4,5 +4,8 @@
   "description": "Website HTML CSS JavaScript",
   "main": "index.html",
   "author": "Bui Hoang Anh",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0"
+  }
 }

@@ -7,6 +7,7 @@
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+ 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -205,21 +206,24 @@
   </div> <!-- End device-wrapper -->
 
   <!-- Scripts -->
-  <script src="../js/common.js"></script>
-  <script src="../js/attendance.js"></script>
+  <!-- <script src="../js/common.js"></script> -->
+  <!-- <script src="../js/attendance.js"></script> -->
+
+  <!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script type="module" src="../js/attendance.js"></script>
   <script>
     function setMemberFilter(member, el) {
-      currentAttendanceFilter = member;
+      window.setAttendanceFilter(member);
       document.querySelectorAll(".chip-btn").forEach(b => {
         b.className = "chip-btn bg-white border border-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5 flex-shrink-0 hover:bg-slate-50";
       });
       el.className = "chip-btn bg-blue-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5 flex-shrink-0 shadow-sm";
-      renderAttendancePage();
     }
 
     function handleSearch(val) {
-      currentAttendanceSearch = val;
-      renderAttendancePage();
+      window.setAttendanceSearch(val);
     }
 
     // Tính tổng công riêng từng người từ toàn bộ data
@@ -276,7 +280,12 @@
       renderAttendancePage();
       renderPerWorkerSummary();
     });
+
+    
   </script>
 </body>
+
+
+
 </html>
 
